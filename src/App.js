@@ -15,7 +15,7 @@ const app = props => {
   // can use multiple useStates; useState hook
   const [ zodiacSigns, zodiacSignsState ] = useState('gemini');
 
-  const switchNameHandler = () => {
+  const switchNameHandler = (newName = "") => {
     let clonedPeople = [...personsState.persons];
     let currentIndex = clonedPeople.length;
     console.log('howdy')
@@ -29,8 +29,24 @@ const app = props => {
       clonedPeople[randomIndex] = temporaryValue;
     }
 
+    if (newName && clonedPeople) {
+      clonedPeople[0].name = newName;
+    }
+
     // does not merge; replaces old state; must add other properties
     setPersonsState({persons: [...clonedPeople]});
+  }
+
+  const nameChangedHandler = (event = null) => {
+    if (!event) return;
+
+    setPersonsState({
+      persons: [
+        { name: event.target.value, age: 28 },
+        { name: "CJ", age: 30 },
+        { name: "Stephanie", age: 27 }
+      ]
+    });
   }
 
   return(
@@ -42,10 +58,16 @@ const app = props => {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
-        <button onClick={switchNameHandler}>Switch Name</button>
+        <button onClick={() => switchNameHandler()}>Switch Name</button>
 
-        <Person name={personsState.persons[0].name} age={personsState.persons[0].age}/>
-        <Person name={personsState.persons[1].name} age={personsState.persons[1].age} >I like to swim. </Person>
+        <Person 
+          name={personsState.persons[0].name}
+         age={personsState.persons[0].age}
+         click={() => switchNameHandler("Susi")}
+         changed={nameChangedHandler}
+         />
+        <Person name={personsState.persons[1].name} age={personsState.persons[1].age} 
+        click={ () => switchNameHandler("Jenn")}>I like to swim. </Person>
 
         {zodiacSigns}
       </div>
